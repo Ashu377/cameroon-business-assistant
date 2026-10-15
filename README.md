@@ -1,32 +1,35 @@
 # KumbaBiz — Cameroon Business Manager
 
-A mobile-first, English/French business manager for small businesses in Cameroon. It uses FCFA (XAF) and is designed as an installable Progressive Web App.
+A bilingual English/French, mobile-first business manager for Cameroon. It uses FCFA (XAF) and works as an installable Progressive Web App.
 
-## What works in this version
+## Working features
 
-- Sales entry with multiple products, stock validation, partial payments, and customer balances
-- Automatic stock deduction when sales are recorded; stock is restored if a sale is deleted
-- Product catalog with cost/selling prices, SKU, categories, low-stock thresholds, and restocking
-- Customer records with WhatsApp reminder links for balances due (the owner reviews and sends the message)
-- Printable sales receipts with business details and payment breakdown
-- English/French interface, sales and inventory reports, CSV export, JSON backup and restore
-- Responsive layout, offline app shell, and local persistence in the browser
+- Record sales with multiple products, stock validation, partial payments, and customer balances
+- Automatically deduct stock on sale; restore stock if a sale is deleted
+- Product catalogue with cost/selling prices, SKU, categories, low-stock alerts, and restocking
+- Customer records and prefilled WhatsApp balance reminders (the owner reviews and sends)
+- Printable receipts, seven-day sales view, inventory summaries, CSV export, JSON backup/restore
+- Local-first mode plus optional Supabase email/password account and cloud workspace sync
+- Row Level Security (RLS) restricts each cloud workspace to its signed-in owner
+
+## Supabase setup
+
+1. In this project, open the Supabase **SQL Editor** and run `supabase-schema.sql` once. It creates the `user_workspaces` table and owner-only RLS policies.
+2. In Supabase **Authentication → URL Configuration**, set the Site URL to `https://ashu377.github.io/cameroon-business-assistant/` and add that same address to the allowed redirect URLs.
+3. Publish the repository using the workflow below. Open **Account & sync** in KumbaBiz, create/sign into an app account, then choose whether to upload local records or use an existing cloud copy.
+
+`supabase-config.js` contains only the public publishable key, which is designed for frontend use. Do not add a Supabase `service_role` or secret key to the website or repository. RLS must remain enabled. The dashboard account and KumbaBiz app account are separate sign-ins.
+
+The current sync stores one JSON workspace per account. It is suitable for early testing with one person using one device at a time; simultaneous edits on multiple devices can overwrite each other. Keep JSON backups and do not treat this first cloud-sync milestone as audited accounting software.
 
 ## Publish with GitHub Pages
 
-1. In the repository, open **Settings → Pages**.
-2. Under **Build and deployment**, choose **Deploy from a branch**.
-3. Select the `main` branch and `/ (root)`, then save.
-4. Wait for GitHub Pages to finish deploying. The published URL will be shown in Settings → Pages.
+The repository includes a GitHub Actions workflow. GitHub Pages is configured to deploy it. Check the **Actions** tab for the deploy result; the live site is `https://ashu377.github.io/cameroon-business-assistant/`.
 
-The included workflow also deploys the root folder to GitHub Pages when enabled in the repository settings.
+## Data and privacy
 
-## Important data limitation
-
-This is a functional single-device MVP, not a multi-user cloud accounting service. Business records are stored in that browser's local storage. They are not synchronized between devices and are not automatically uploaded or backed up. Users should export backups and protect access to shared devices. Never store payment PINs, card details, or account passwords in the app.
-
-For a commercial multi-device product, add a secure backend with authentication, access controls, database backups, audit logging, and tested privacy protections before storing customer data in the cloud. Real automated WhatsApp messages and mobile-money payment processing require appropriate official provider integrations and customer consent; this app only opens a prefilled reminder for the user to review and send.
+Signed-out records stay in that browser. When signed in, the workspace is sent to Supabase so it can sync. Passwords are managed by Supabase Auth and are never stored in the KumbaBiz workspace. WhatsApp reminders open a prefilled message for the owner to review and send; the app does not send WhatsApp messages automatically. Never store payment PINs or bank passwords.
 
 ## Development
 
-No build step or third-party JavaScript package is required. Open `index.html` through a local static server or publish the repository with GitHub Pages. The service worker requires HTTPS or localhost.
+No build step or third-party JavaScript package is required. The browser loads Supabase JS v2 from jsDelivr; the ordinary local app remains available if the cloud library is unavailable. The service worker requires HTTPS or localhost.
