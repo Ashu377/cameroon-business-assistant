@@ -1,5 +1,5 @@
-const CACHE = 'buea-chop-owner-shell-v4';
-const SHELL = ['./', './index.html', './styles.css', './app.js', './supabase-config.js', './manifest.webmanifest', './icon.svg'];
+const CACHE = 'buea-chop-owner-shell-v5';
+const SHELL = ['./', './index.html', './styles.css', './app.js?v=5', './supabase-config.js', './manifest.webmanifest', './icon.svg'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
 });
