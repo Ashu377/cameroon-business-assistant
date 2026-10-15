@@ -1,4 +1,4 @@
-const CACHE = 'kumbabiz-shell-v2';
+const CACHE = 'buea-chop-owner-shell-v3';
 const SHELL = ['./', './index.html', './styles.css', './app.js', './supabase-config.js', './manifest.webmanifest', './icon.svg'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
